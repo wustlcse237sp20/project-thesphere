@@ -6,6 +6,8 @@ To Run Program:
 
 - Terminal: "cd" to the directory that the repo is cloned to, cd into the "src" bin, and run "Java MainUIFrame.java".
 
+Iteration 1:
+
 - What user stories were completed this iteration?
 	
 	The basic user interface has been completed as well as the beginning file input/output system used to store user information. Folders named after the user's email are created upon account creation. A "password.txt" file with that user's password is created in that user's directory. The classes for User and Wallet have also been created.
