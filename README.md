@@ -1,8 +1,10 @@
 # cse237-project
 
 To Run Program:
-Eclipse: Open the entire repo folder in Eclipse and run the file "MainUIFrame.java". 
-Terminal: "cd" to the directory that the repo is cloned to, cd into the "src" bin, and run "Java MainUIFrame.java".
+
+- Eclipse: Open the entire repo folder in Eclipse and run the file "MainUIFrame.java". 
+
+- Terminal: "cd" to the directory that the repo is cloned to, cd into the "src" bin, and run "Java MainUIFrame.java".
 
 - What user stories were completed this iteration?
 	
