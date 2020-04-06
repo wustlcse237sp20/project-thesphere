@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+import java.io.*;
+
 
 public class MainUIFrame {
 
@@ -59,6 +61,11 @@ public class MainUIFrame {
 	 */
 	public MainUIFrame() {
 		initialize();
+	}
+	public static void writingPassword(String password, String email) throws IOException {
+		FileWriter fileWriter = new FileWriter("./"+ email + "/" + "password.txt");
+		fileWriter.write(password);
+		fileWriter.close();
 	}
 
 	/**
@@ -355,8 +362,26 @@ public class MainUIFrame {
 				
 				
 				if((createAccountResult == JOptionPane.OK_OPTION) && checkIfAccountCreated()) {
+
+					// create directory for email
+					File file = new File(emailFieldCA.getText());
+					if (!file.exists()) {
+						if (file.mkdir()) {
+
+							System.out.println("Directory is created!");
+						} else {
+							System.out.println("Failed to create directory!");
+						}
+					}
 					
-					
+					// save password in textfile
+    				String fileContent = "Hello Learner !! Welcome to howtodoinjava.com.";
+    				try {
+						writingPassword(passwordFieldCA.getText(), emailFieldCA.getText());
+					}
+					catch(IOException error){
+						error.printStackTrace();
+					}
 					System.out.println(firstNameFieldCA.getText() + " " + lastNameFieldCA.getText() + " " + emailFieldCA.getText() + " " +
 							new String(passwordFieldCA.getPassword()) + " " + new String(retypePasswordFieldCA.getPassword()));
 					

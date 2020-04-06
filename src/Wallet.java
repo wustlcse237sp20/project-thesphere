@@ -1,5 +1,5 @@
 public class Wallet{
-	private Ticket[] tickets
+//	private Ticket[] tickets;
 	private int rewardPoints;
 	private String cardNum;
 	private String cardName;
