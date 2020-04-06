@@ -15,14 +15,14 @@ import javax.swing.SwingConstants;
 public class MainUIFrame {
 
 	private JFrame frame;
-	private Boolean userValidated;
-	private Boolean accountValidated;
-	private Boolean creditCardValidated;
+	private boolean userValidated;
+	private boolean accountValidated;
+	private boolean creditCardValidated;
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
 	
 
-	public Boolean getUserValidated() {
+	public boolean getUserValidated() {
 		return userValidated;
 	}
 
@@ -494,7 +494,7 @@ public class MainUIFrame {
 	 * Check for account validation by confirming the inputs are valid and there is no existent account that has the same information as the input
 	 * @return Boolean for whether or not the account was created successfully
 	 */
-	public Boolean checkIfAccountCreated() {
+	public boolean checkIfAccountCreated() {
 		
 		accountValidated = true;
 		
@@ -507,7 +507,7 @@ public class MainUIFrame {
 	 * Check that the card info input by the user is valid (correct digits in the card/CVC code is 3 characters
 	 * @return Boolean for whether or not the account is validated successfully
 	 */
-	public Boolean cardInfoValidated() {
+	public boolean cardInfoValidated() {
 		
 		creditCardValidated = true;
 		
