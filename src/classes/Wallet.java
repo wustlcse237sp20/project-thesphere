@@ -1,3 +1,4 @@
+package classes;
 public class Wallet{
 //	private Ticket[] tickets;
 	private int rewardPoints;
