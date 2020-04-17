@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+
+import classes.User;
+
 import java.io.*;
 
 
@@ -23,6 +26,7 @@ public class MainUIFrame {
 	private boolean creditCardValidated;
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
+	private User loggedInUser;
 	
 
 	public boolean getUserValidated() {
@@ -62,11 +66,6 @@ public class MainUIFrame {
 	 */
 	public MainUIFrame() {
 		initialize();
-	}
-	public static void writingPassword(String password, String email) throws IOException {
-		FileWriter fileWriter = new FileWriter("./"+ email + "/" + "password.txt");
-		fileWriter.write(password);
-		fileWriter.close();
 	}
 
 	/**
@@ -200,15 +199,11 @@ public class MainUIFrame {
 		seatingComboBox.setVisible(false);
 		
 		
-		
-		
 		dateAndBandComboBox.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				selectedDateAndBandItem = (String) dateAndBandComboBox.getSelectedItem();
-				
 				/*
 				
 				if(selectedDateAndBandItem == "Date : Band") {
@@ -218,7 +213,6 @@ public class MainUIFrame {
 				}
 				
 				*/
-				
 				System.out.println(selectedDateAndBandItem);
 				
 				/*
@@ -241,16 +235,8 @@ public class MainUIFrame {
 					
 				}
 				*/
-				
-				
-				seatingComboBox.setVisible(true);
-				
-				
-				
+				seatingComboBox.setVisible(true);	
 			}
-			
-			
-			
 		});
 		
 		seatingComboBox.addActionListener(new ActionListener() {
@@ -267,16 +253,12 @@ public class MainUIFrame {
 				if(selectedSeatItem == "Row#,Seat#,Price") {
 					
 					JOptionPane.showMessageDialog(frame, "Error! Please choose a valid Date/Band and Seat.", null, JOptionPane.ERROR_MESSAGE);
-					
-					
+						
 				}
- 				
 				*/
 				
 				proceedToCheckoutButton.setVisible(true);
-				
 			}
-			
 		});
 		
 		proceedToCheckoutButton.addActionListener(new ActionListener() {
@@ -329,14 +311,8 @@ public class MainUIFrame {
 						
 						JOptionPane.getRootFrame().dispose();
 						
-					}
-					
-				}
-				
-				
-			
-				
-				
+					}	
+				}	
 			}
 			
 		});
@@ -349,7 +325,6 @@ public class MainUIFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				
-				
 				JTextField firstNameFieldCA = new JTextField();
 				JTextField lastNameFieldCA = new JTextField();
 				JTextField emailFieldCA = new JTextField();
@@ -360,80 +335,59 @@ public class MainUIFrame {
 				
 				int createAccountResult = JOptionPane.showOptionDialog(frame, new Object[] {createAccountMessage, firstNameFieldCA,  lastNameFieldCA,  emailFieldCA,  passwordFieldCA,  retypePasswordFieldCA}, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, createAccountMessage);
 				
-				
-				
-				if((createAccountResult == JOptionPane.OK_OPTION) && checkIfAccountCreated()) {
-
-					// create directory for email
-					File file = new File(emailFieldCA.getText());
-					if (!file.exists()) {
-						if (file.mkdir()) {
-
-							System.out.println("Directory is created!");
-						} else {
-							System.out.println("Failed to create directory!");
+				if(createAccountResult == JOptionPane.OK_OPTION) {
+					if (firstNameFieldCA.getText().equals("") || lastNameFieldCA.getText().equals("") || emailFieldCA.getText().equals("") || passwordFieldCA.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Error: Please fill out each field");
+					}
+					else if (User.checkIfEmailUsed(emailFieldCA.getText())) {
+						JOptionPane.showMessageDialog(null, "Error: an account with this email already exists. Please try again.");
+					}
+					else if(!String.valueOf(passwordFieldCA.getPassword()).equals(String.valueOf(retypePasswordFieldCA.getPassword()))) {
+						JOptionPane.showMessageDialog(null, "Error: passwords do not match");
+					}
+					else {	    
+	    				try {
+							loggedInUser = User.createNewUser(firstNameFieldCA.getText(), lastNameFieldCA.getText(), emailFieldCA.getText(), String.valueOf(passwordFieldCA.getPassword()));
 						}
-					}
+						catch(IOException error){
+							error.printStackTrace();
+						}
+						
+						JLabel signedInAsLabel = new JLabel("Signed in as: "+loggedInUser.getName());
+						springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
+						springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
+						frame.getContentPane().add(signedInAsLabel);
+						
+						comboBoxLabel.setVisible(true);
+						dateAndBandComboBox.setVisible(true);
+						signInToBookAndPurchaseTicketsLabel.setVisible(false);
+						}
 					
-					// save password in textfile
-    				String fileContent = "Hello Learner !! Welcome to howtodoinjava.com.";
-    				try {
-						writingPassword(passwordFieldCA.getText(), emailFieldCA.getText());
-					}
-					catch(IOException error){
-						error.printStackTrace();
-					}
-					System.out.println(firstNameFieldCA.getText() + " " + lastNameFieldCA.getText() + " " + emailFieldCA.getText() + " " +
-							new String(passwordFieldCA.getPassword()) + " " + new String(retypePasswordFieldCA.getPassword()));
-					
-					JLabel signedInAsLabel = new JLabel("Signed in as: " + " '" + emailFieldCA.getText() + "' ");
-					springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
-					springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
-					frame.getContentPane().add(signedInAsLabel);
-					
-					comboBoxLabel.setVisible(true);
-					dateAndBandComboBox.setVisible(true);
-					signInToBookAndPurchaseTicketsLabel.setVisible(false);
-					
-				}else if((createAccountResult == JOptionPane.OK_OPTION) && !(checkIfAccountCreated())) {
-					
-					JOptionPane.showMessageDialog(null, "Error: an account with this email already exists. Please try again.");
-				
-				
 				}else if(createAccountResult == JOptionPane.CANCEL_OPTION) {
 					
 					JOptionPane.getRootFrame().dispose();
 					
-				}
-				
-			
-			
-			
+				}			
 			}});
+		
 		frame.getContentPane().add(createAccountButton);
 		
 		//sign in button and action listener; always visible on main frame
 		JButton signInButton = new JButton("Sign In");
 		springLayout.putConstraint(SpringLayout.WEST, createAccountButton, 15, SpringLayout.EAST, signInButton);
+		
 		signInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+						
 				JTextField emailField = new JTextField();
 				JPasswordField passwordField = new JPasswordField();
 				String signInMessage = "Please enter your email and password.";
 				int result = JOptionPane.showOptionDialog(frame, new Object[] {signInMessage,  emailField,  passwordField}, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, signInMessage);
-				
-				
-				if((result == JOptionPane.OK_OPTION) && (checkIfUserValidated())) {
+
+				if(result == JOptionPane.OK_OPTION && User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
+					loggedInUser = new User(emailField.getText());
+					JLabel signedInAsLabel = new JLabel("Signed in as: " +loggedInUser.getName());
 					
-					
-					
-					System.out.println(emailField.getText() + " " + new String(passwordField.getPassword()));
-					
-					
-					
-					JLabel signedInAsLabel = new JLabel("Signed in as: " + " '" + emailField.getText() + "' ");
 					springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
 					springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
 					frame.getContentPane().add(signedInAsLabel);
@@ -443,7 +397,7 @@ public class MainUIFrame {
 					signInToBookAndPurchaseTicketsLabel.setVisible(false);
 					
 					
-				}else if((result == JOptionPane.OK_OPTION) && !(checkIfUserValidated())) {
+				}else if(result == JOptionPane.OK_OPTION && !User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
 					
 					JOptionPane.showMessageDialog(null, "An account with this email and password does not exist. Try again.");
 					
@@ -451,8 +405,7 @@ public class MainUIFrame {
 					
 					JOptionPane.getRootFrame().dispose();
 					
-				}	
-				
+				}				
 			}
 		});
 		
@@ -461,12 +414,6 @@ public class MainUIFrame {
 		springLayout.putConstraint(SpringLayout.WEST, signInButton, 10, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().add(signInButton);
 	
-		
-		
-		
-		
-		
-		
 		
 		//Sign out button and action listener; always visible on main frame
 		JButton signOutButton = new JButton("Sign out");
@@ -481,7 +428,7 @@ public class MainUIFrame {
 				int signOutResult = JOptionPane.showConfirmDialog(frame, new Object[] {message}, null, JOptionPane.YES_NO_OPTION);
 				
 				if(signOutResult == JOptionPane.YES_OPTION) {
-					
+					loggedInUser = null;
 					frame.dispose();
 					
 					MainUIFrame f = new MainUIFrame();
@@ -493,41 +440,12 @@ public class MainUIFrame {
 					
 					JOptionPane.getRootFrame().dispose();
 					
-				}
-				
-				
-				
+				}		
 			}
 		});
 		frame.getContentPane().add(signOutButton);
-		
-		
+			
 	}
-	/**
-	 * Check for sign in validation by checking database for the account that matches the email and password that was input
-	 * @return Boolean for whether or not the the user validation was successful
-	 */
-	public Boolean checkIfUserValidated() {
-		
-		userValidated = true;
-		
-		//get email from textbox
-		
-		return userValidated;
-		
-	}
-	/**
-	 * Check for account validation by confirming the inputs are valid and there is no existent account that has the same information as the input
-	 * @return Boolean for whether or not the account was created successfully
-	 */
-	public boolean checkIfAccountCreated() {
-		
-		accountValidated = true;
-		
-		return accountValidated;
-		
-	}
-	
 	
 	/**
 	 * Check that the card info input by the user is valid (correct digits in the card/CVC code is 3 characters
@@ -540,6 +458,4 @@ public class MainUIFrame {
 		return creditCardValidated;
 		
 	}
-	
-	
 }
