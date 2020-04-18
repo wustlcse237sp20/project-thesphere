@@ -21,21 +21,10 @@ import java.io.*;
 public class MainUIFrame {
 
 	private JFrame frame;
-	private boolean userValidated;
-	private boolean accountValidated;
 	private boolean creditCardValidated;
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
 	private User loggedInUser;
-	
-
-	public boolean getUserValidated() {
-		return userValidated;
-	}
-
-	public void setUserValidated(Boolean userValidated) {
-		this.userValidated = userValidated;
-	}
 
 	public JFrame getFrame() {
 		return frame;
