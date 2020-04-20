@@ -23,21 +23,11 @@ import java.util.List;
 public class MainUIFrame {
 
 	private JFrame frame;
-	private boolean userValidated;
 	private boolean creditCardValidated;
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
 	private User loggedInUser;
 	private List<Ticket> ticketList = new ArrayList<Ticket>();
-	
-
-	public boolean getUserValidated() {
-		return userValidated;
-	}
-
-	public void setUserValidated(Boolean userValidated) {
-		this.userValidated = userValidated;
-	}
 
 	public JFrame getFrame() {
 		return frame;
