@@ -6,7 +6,7 @@ To Run Program:
 
 - Terminal: "cd" to the directory that the repo is cloned to, cd into the "src" directory, compile MainUIFrame with `javac MainUIFrame.java` and run `java MainUIFrame`.
 
-Iteration 1:
+Iteration 2:
 
 - What user stories were completed this iteration?
 	
