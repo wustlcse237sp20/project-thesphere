@@ -5,9 +5,14 @@ public class Event{
 	private String eventName;
 	private String eventDate;
 	private String eventTime;
-	private int rowNumber;
-	private int seatNumber;
-	private int ticketPrice;
+	private boolean[][] sold;
+	
+	public Event(String eventName, String eventDate, String eventTime, int numRows, int numSeats) {
+		this.eventName = eventName;
+		this.eventDate = eventDate;
+		this.eventTime = eventTime;
+		this.sold = new boolean[numRows][numSeats];
+	}
 	
 	public String getEventName() {
 		return eventName;
@@ -27,23 +32,16 @@ public class Event{
 	public void setEventTime(String eventTime) {
 		this.eventTime = eventTime;
 	}
-	public int getRowNumber() {
-		return rowNumber;
-	}
-	public void setRowNumber(int rowNumber) {
-		this.rowNumber = rowNumber;
-	}
-	public int getSeatNumber() {
-		return seatNumber;
-	}
-	public void setSeatNumber(int seatNumber) {
-		this.seatNumber = seatNumber;
-	}
-	public int getTicketPrice() {
-		return ticketPrice;
-	}
-	public void setTicketPrice(int ticketPrice) {
-		this.ticketPrice = ticketPrice;
+
+	public boolean[][] getSold() {
+		return sold;
 	}
 
+	public void setSold(boolean[][] sold) {
+		this.sold = sold;
+	}
+	
+	public void sellTicket(int row, int seat) {
+		sold[row][seat] = true;
+	}
 }
