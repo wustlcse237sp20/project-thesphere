@@ -13,9 +13,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import classes.User;
+import classes.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainUIFrame {
@@ -25,6 +27,7 @@ public class MainUIFrame {
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
 	private User loggedInUser;
+	private List<Ticket> ticketList = new ArrayList<Ticket>();
 
 	public JFrame getFrame() {
 		return frame;
@@ -161,6 +164,13 @@ public class MainUIFrame {
 		frame.getContentPane().add(proceedToCheckoutButton);
 		proceedToCheckoutButton.setVisible(false);
 		
+		JButton viewAccountButton = new JButton("Click Here to View Account");
+		springLayout.putConstraint(SpringLayout.NORTH, viewAccountButton, -497, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, viewAccountButton, -468, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, viewAccountButton, -10, SpringLayout.EAST, frame.getContentPane());
+		frame.getContentPane().add(viewAccountButton);
+		viewAccountButton.setVisible(false);
+		
 		String[] dropDownMenuItemsForDateAndBand = { "Date : Band", firstDateLabel.getText() + " : " + firstBandNameLabel.getText(), secondDateLabel.getText() + " : " + secondBandNameLabel.getText(), thirdDateLabel.getText() + " : " + thirdBandNameLabel.getText(), 
 				fourthDateLabel.getText() + " : " + fourthBandNameLabel.getText() };
 		
@@ -193,37 +203,7 @@ public class MainUIFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				selectedDateAndBandItem = (String) dateAndBandComboBox.getSelectedItem();
-				/*
 				
-				if(selectedDateAndBandItem == "Date : Band") {
-					
-					JOptionPane.showMessageDialog(frame, "Error! Please choose a valid Date/Band and Seat.", null, JOptionPane.ERROR_MESSAGE);
-					System.out.println("error");
-				}
-				
-				*/
-				System.out.println(selectedDateAndBandItem);
-				
-				/*
-				if(selectedDateAndBandItem.equals(firstDateLabel.getText() + " : " + firstBandNameLabel.getText())) {
-					
-					System.out.println("success");
-					dateAndBandSelected = firstDateLabel.getText() + " : " + firstBandNameLabel.getText();
-					
-				}else if(selectedDateAndBandItem.equals(secondDateLabel.getText() + " : " + secondBandNameLabel.getText())) {
-					
-					dateAndBandSelected = secondDateLabel.getText() + " : " + secondBandNameLabel.getText();
-					
-				}else if(selectedDateAndBandItem.equals(thirdDateLabel.getText() + " : " + thirdBandNameLabel.getText())) {
-					
-					dateAndBandSelected = thirdDateLabel.getText() + " : " + thirdBandNameLabel.getText();
-					
-				}else if(selectedDateAndBandItem.equals(fourthDateLabel.getText() + " : " + fourthBandNameLabel.getText())) {
-					
-					dateAndBandSelected = fourthDateLabel.getText() + " : " + fourthBandNameLabel.getText();
-					
-				}
-				*/
 				seatingComboBox.setVisible(true);	
 			}
 		});
@@ -234,17 +214,6 @@ public class MainUIFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				selectedSeatItem = (String) seatingComboBox.getSelectedItem();
-				
-				System.out.println(selectedSeatItem);
-				
-				/*
-				
-				if(selectedSeatItem == "Row#,Seat#,Price") {
-					
-					JOptionPane.showMessageDialog(frame, "Error! Please choose a valid Date/Band and Seat.", null, JOptionPane.ERROR_MESSAGE);
-						
-				}
-				*/
 				
 				proceedToCheckoutButton.setVisible(true);
 			}
@@ -277,6 +246,12 @@ public class MainUIFrame {
 						int confirmPurchaseResult = JOptionPane.showConfirmDialog(frame, new Object[] {confirmPurchaseMessage}, null, JOptionPane.YES_NO_OPTION);
 						
 						if(confirmPurchaseResult == JOptionPane.YES_OPTION) {
+							
+							Ticket t = new Ticket();
+							t.setDateAndBand(selectedDateAndBandItem);
+							t.setSeat(selectedSeatItem);
+							ticketList.add(t);
+							
 							
 							JOptionPane.getRootFrame().dispose();
 							
@@ -350,6 +325,7 @@ public class MainUIFrame {
 						comboBoxLabel.setVisible(true);
 						dateAndBandComboBox.setVisible(true);
 						signInToBookAndPurchaseTicketsLabel.setVisible(false);
+						viewAccountButton.setVisible(true);
 						}
 					
 				}else if(createAccountResult == JOptionPane.CANCEL_OPTION) {
@@ -375,7 +351,7 @@ public class MainUIFrame {
 
 				if(result == JOptionPane.OK_OPTION && User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
 					loggedInUser = new User(emailField.getText());
-					JLabel signedInAsLabel = new JLabel("Signed in as: " +loggedInUser.getName());
+					JLabel signedInAsLabel = new JLabel("Signed in as: " + loggedInUser.getName());
 					
 					springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
 					springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
@@ -384,6 +360,7 @@ public class MainUIFrame {
 					comboBoxLabel.setVisible(true);
 					dateAndBandComboBox.setVisible(true);
 					signInToBookAndPurchaseTicketsLabel.setVisible(false);
+					viewAccountButton.setVisible(true);
 					
 					
 				}else if(result == JOptionPane.OK_OPTION && !User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
@@ -433,6 +410,30 @@ public class MainUIFrame {
 			}
 		});
 		frame.getContentPane().add(signOutButton);
+		
+		
+		viewAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(ticketList.isEmpty()) {
+					
+					UserAccountPage u = new UserAccountPage(loggedInUser.getName());
+					JFrame userAccountFrame = u.getUserAccountPageFrame();
+					userAccountFrame.setVisible(true);
+					
+				}else {
+					
+					UserAccountPage u = new UserAccountPage(loggedInUser.getName(), ticketList);
+					JFrame userAccountFrame = u.getUserAccountPageFrame();
+					userAccountFrame.setVisible(true);
+					
+				}
+			
+			}
+			
+		});
+		
+		
 			
 	}
 	

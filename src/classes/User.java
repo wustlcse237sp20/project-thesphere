@@ -1,12 +1,15 @@
 package classes;
 
 import java.io.*;
+
 import java.util.Scanner;
+
 
 public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
+	
 	//Eventually put a wallet object here and in constructor
 
 
@@ -38,6 +41,11 @@ public class User {
 		return this.firstName+" "+this.lastName;
 	}
 
+	public String getEmail() {
+		
+		return this.email;
+		
+	}
 
 	//All of these update functions can be made to return boolean (true=successful update)
 	
