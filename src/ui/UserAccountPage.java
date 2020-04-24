@@ -1,7 +1,12 @@
 package ui;
 import classes.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
-import java.awt.EventQueue;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 import java.awt.Font;
 import java.util.List;
 
@@ -114,14 +119,31 @@ public class UserAccountPage {
 		userAccountPageFrame.getContentPane().add(signedInAsLabel);
 		
 		
+		// display tickets
 		if(numberOfPurchasedTickets > 1) {
 			
 			for(int i = 0; i < purchasedTicketsList.size(); i++) {
+				// debugging
+				System.out.println(purchasedTicketsList.get(i).getDateAndBand());
+				
 				
 				JLabel label = new JLabel(purchasedTicketsList.get(i).getDateAndBand() + "; " + purchasedTicketsList.get(i).getSeat());
 				springLayout.putConstraint(SpringLayout.NORTH, label, (-387 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
 				springLayout.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, firstPurchasedTicketLabel);
 				springLayout.putConstraint(SpringLayout.SOUTH, label, (-371 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
+
+				// display
+				try {
+					File image = new File("images/" + purchasedTicketsList.get(i).getIMGpath() +".jpg");
+					if (image.exists()){
+						System.out.println("exists");
+					}
+					BufferedImage travisScott = ImageIO.read(image);
+					ImageIcon icon = new ImageIcon(travisScott);
+					label.setIcon(icon);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 				userAccountPageFrame.getContentPane().add(label);
 				
 				

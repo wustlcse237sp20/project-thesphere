@@ -4,12 +4,20 @@ public class Ticket {
 
 	private String dateAndBand;
 	private String seat;
+	private String IMGpath;
 	
 	
-	public Ticket() {
-		
-		dateAndBand = this.dateAndBand;
-		seat = this.seat;
+	public Ticket(String dateAndBand_, String seat_) {
+		this.dateAndBand = dateAndBand_;
+		this.seat = seat_;
+		int indexToStart = 0;
+		for (int i =0; i <dateAndBand_.length(); i++) {
+			if (dateAndBand_.charAt(i) == ':') {
+				indexToStart = i+2;
+				break;
+			}
+		}
+		this.IMGpath = dateAndBand_.substring(indexToStart);
 		
 	}
 	
@@ -23,6 +31,10 @@ public class Ticket {
 		
 		return seat;
 		
+	}
+	
+	public String getIMGpath() {
+		return IMGpath;
 	}
 	
 	public void setDateAndBand(String d) {

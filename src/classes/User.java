@@ -108,7 +108,9 @@ public class User {
 	public void initializeTicketList(){
 		File f = new File("Users/"+email+"/tickets.txt");
 
-		// read through tickets.txt and fill in variable
+// initialize tickets to contents of ticket.txt file
+// for each line in tickets.txt:
+// 		ticket.dateandband = texts until "Row"
 //		try {
 //			Scanner s = new Scanner(f);
 //			String pass = s.nextLine();
