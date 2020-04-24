@@ -1,5 +1,5 @@
 package ui;
-import java.awt.EventQueue;
+import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -9,6 +9,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
+
+
+
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -81,11 +87,25 @@ public class MainUIFrame {
 		frame.getContentPane().add(upcomingEventsLabel);
 		
 		//band name labels
-		JLabel firstBandNameLabel = new JLabel("Band Name");
+		JLabel firstBandNameLabel = new JLabel("Travis Scott");
 		springLayout.putConstraint(SpringLayout.NORTH, firstBandNameLabel, 8, SpringLayout.SOUTH, upcomingEventsLabel);
 		springLayout.putConstraint(SpringLayout.WEST, firstBandNameLabel, 189, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, firstBandNameLabel, -792, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, firstBandNameLabel, -200, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, firstBandNameLabel, -500, SpringLayout.EAST, frame.getContentPane());
+
 		firstBandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		try {
+			File images = new File("images/astroworld.jpg");
+			if (images.exists()){
+				System.out.println("exists");
+			}
+			BufferedImage travisScott = ImageIO.read(new File ("images/astroworld.jpg"));
+			ImageIcon icon = new ImageIcon(travisScott);
+			firstBandNameLabel.setIcon(icon);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		frame.getContentPane().add(firstBandNameLabel);
 		
 		JLabel secondBandNameLabel = new JLabel("Band Name");
@@ -250,7 +270,12 @@ public class MainUIFrame {
 							Ticket t = new Ticket();
 							t.setDateAndBand(selectedDateAndBandItem);
 							t.setSeat(selectedSeatItem);
-							ticketList.add(t);
+							try {
+								loggedInUser.addTicket(t);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							
 							
 							JOptionPane.getRootFrame().dispose();
