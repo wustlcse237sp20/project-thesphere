@@ -1,8 +1,6 @@
 package classes;
 
 import java.io.*;
-
-import classes.Ticket;
 import java.util.*;
 
 public class Event {
@@ -53,6 +51,10 @@ public class Event {
 		
 	}
 	
+	public String getEventID() {
+		return this.eventID;
+	}
+	
 	public String getArtist(){
 		return this.artist;
 	}
@@ -60,6 +62,7 @@ public class Event {
 	public String getEventDate() {
 		return this.eventDate;
 	}
+	
 	public String getIMGpath() {
 		return this.IMGpath;
 	}

@@ -36,7 +36,7 @@ public class User {
 				counter++;
 			}
 			s.close();
-			this.wallet = Wallet.createWallet(emailAddress);
+			this.wallet = new Wallet(emailAddress);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -48,9 +48,11 @@ public class User {
 	}
 
 	public String getEmail() {
-		
 		return this.email;
-		
+	}
+	
+	public Wallet getWallet() {
+		return this.wallet;
 	}
 
 	//All of these update functions can be made to return boolean (true=successful update)
@@ -93,6 +95,8 @@ public class User {
 		FileWriter infoWriter = new FileWriter("./Users/"+email+"/info.txt");
 		infoWriter.write("First Name: "+first+System.lineSeparator()+"Last Name: "+last);
 		infoWriter.close();
+		
+		Wallet.createWallet(email);
 		
 		return new User(email);
 	}

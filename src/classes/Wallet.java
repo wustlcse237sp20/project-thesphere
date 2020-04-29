@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Wallet{
+	private String ownerEmail;
 	private ArrayList<Ticket> tickets;
 	private int rewardPoints;
 	private String cardNum;
@@ -18,6 +19,8 @@ public class Wallet{
 
 	public Wallet(String email){
 		try {
+			this.ownerEmail = email;
+			
 			File f = new File("Users/"+email+"/Wallet/tickets.txt");
 			Scanner s = new Scanner(f);
 			this.tickets = new ArrayList<Ticket>();
@@ -39,6 +42,10 @@ public class Wallet{
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Ticket> getTickets(){
+		return this.tickets;
 	}
 
 	public void updateInfo(String newNum, String newName, String newExpDate, int newZip, int newSecCode){
@@ -71,8 +78,16 @@ public class Wallet{
 	}
 	
 	public void addTicket(String ticketString) throws IOException{
-		// add to List<Ticket> variable and update db
-		//TODO
+		this.tickets.add(new Ticket(ticketString));
+	}
+	
+	public void saveTickets() throws IOException {
+		FileWriter ticketWriter = new FileWriter("./Users/"+this.ownerEmail+"/Wallet/tickets.txt", false);
+		for (Ticket ticket : this.tickets) {
+			ticketWriter.write(ticket.toString());
+			ticketWriter.write(System.lineSeparator());
+		}
+		ticketWriter.close();
 	}
 
 

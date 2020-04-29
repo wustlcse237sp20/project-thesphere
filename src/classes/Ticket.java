@@ -6,7 +6,6 @@ public class Ticket {
 	private int row;
 	private int seat;
 	
-	
 	public Ticket(String ticketString) {
 		String[] ticketInfo = ticketString.split(" "); //event_id row seat
 		this.event = new Event(ticketInfo[0]);
@@ -15,15 +14,15 @@ public class Ticket {
 	}
 	
 	public Event getEvent() {
-		
 		return event; 
-		
 	}
 	
 	public int getSeat() {
-		
 		return seat;
-		
+	}
+	
+	public String toString() {
+		return this.event.getEventID()+" "+this.row+" "+this.seat;
 	}
 
 }
