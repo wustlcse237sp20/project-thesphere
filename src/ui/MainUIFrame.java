@@ -1,5 +1,5 @@
 package ui;
-import java.awt.EventQueue;
+import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -9,15 +9,24 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import classes.*;
+import classes.Event;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class MainUIFrame {
@@ -28,6 +37,7 @@ public class MainUIFrame {
 	private String selectedSeatItem;
 	private User loggedInUser;
 	private List<Ticket> ticketList = new ArrayList<Ticket>();
+	private List<Event> eventList = new ArrayList<Event>();
 
 	public JFrame getFrame() {
 		return frame;
@@ -74,79 +84,40 @@ public class MainUIFrame {
 		
 		
 		
-		//upcoming events label
+		
+		// read through events.txt
+		// fill eventlist
+		try {
+			File f = new File("events.txt");
+			Scanner s = new Scanner(f);
+			while (s.hasNextLine()) {
+				
+				String date_and_event = s.nextLine();
+				String date = date_and_event.split(": ")[0];
+				String artist = date_and_event.split(": ")[1];
+				Event e = new Event(artist, date);
+				eventList.add(e);
+
+			}
+			s.close();
+		}
+		catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		
+		// upcoming events label
 		JLabel upcomingEventsLabel = new JLabel("Upcoming Events");
-		springLayout.putConstraint(SpringLayout.NORTH, upcomingEventsLabel, 127, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, upcomingEventsLabel, 130, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, upcomingEventsLabel, 80, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, upcomingEventsLabel, 100, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().add(upcomingEventsLabel);
 		
-		//band name labels
-		JLabel firstBandNameLabel = new JLabel("Band Name");
-		springLayout.putConstraint(SpringLayout.NORTH, firstBandNameLabel, 8, SpringLayout.SOUTH, upcomingEventsLabel);
-		springLayout.putConstraint(SpringLayout.WEST, firstBandNameLabel, 189, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, firstBandNameLabel, -792, SpringLayout.EAST, frame.getContentPane());
-		firstBandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.getContentPane().add(firstBandNameLabel);
-		
-		JLabel secondBandNameLabel = new JLabel("Band Name");
-		springLayout.putConstraint(SpringLayout.NORTH, secondBandNameLabel, 201, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, secondBandNameLabel, 189, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, firstBandNameLabel, -4, SpringLayout.NORTH, secondBandNameLabel);
-		springLayout.putConstraint(SpringLayout.EAST, secondBandNameLabel, -792, SpringLayout.EAST, frame.getContentPane());
-		secondBandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.getContentPane().add(secondBandNameLabel);
-		
-		JLabel thirdBandNameLabel = new JLabel("Band Name");
-		springLayout.putConstraint(SpringLayout.NORTH, thirdBandNameLabel, 255, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, secondBandNameLabel, -6, SpringLayout.NORTH, thirdBandNameLabel);
-		springLayout.putConstraint(SpringLayout.WEST, thirdBandNameLabel, 189, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, thirdBandNameLabel, -792, SpringLayout.EAST, frame.getContentPane());
-		thirdBandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.getContentPane().add(thirdBandNameLabel);
-		
-		JLabel fourthBandNameLabel = new JLabel("Band Name");
-		springLayout.putConstraint(SpringLayout.NORTH, fourthBandNameLabel, 307, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, fourthBandNameLabel, -225, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, thirdBandNameLabel, -6, SpringLayout.NORTH, fourthBandNameLabel);
-		springLayout.putConstraint(SpringLayout.WEST, fourthBandNameLabel, 189, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, fourthBandNameLabel, -792, SpringLayout.EAST, frame.getContentPane());
-		fourthBandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		frame.getContentPane().add(fourthBandNameLabel);
-		
-		//featured events label
-		JLabel featuredEventsLabel = new JLabel("Featured Events");
-		springLayout.putConstraint(SpringLayout.NORTH, featuredEventsLabel, 0, SpringLayout.NORTH, upcomingEventsLabel);
-		springLayout.putConstraint(SpringLayout.WEST, featuredEventsLabel, 123, SpringLayout.EAST, upcomingEventsLabel);
-		springLayout.putConstraint(SpringLayout.EAST, featuredEventsLabel, -629, SpringLayout.EAST, frame.getContentPane());
-		frame.getContentPane().add(featuredEventsLabel);
-		
-		//date labels
-		JLabel firstDateLabel = new JLabel("June 5");
-		springLayout.putConstraint(SpringLayout.NORTH, firstDateLabel, 23, SpringLayout.SOUTH, upcomingEventsLabel);
-		springLayout.putConstraint(SpringLayout.EAST, firstDateLabel, -15, SpringLayout.WEST, firstBandNameLabel);
-		frame.getContentPane().add(firstDateLabel);
-		
-		JLabel secondDateLabel = new JLabel("June 12");
-		springLayout.putConstraint(SpringLayout.NORTH, secondDateLabel, 34, SpringLayout.SOUTH, firstDateLabel);
-		springLayout.putConstraint(SpringLayout.EAST, secondDateLabel, -15, SpringLayout.WEST, secondBandNameLabel);
-		frame.getContentPane().add(secondDateLabel);
-		
-		JLabel thirdDateLabel = new JLabel("June 19");
-		springLayout.putConstraint(SpringLayout.SOUTH, thirdDateLabel, -290, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, thirdDateLabel, -15, SpringLayout.WEST, thirdBandNameLabel);
-		frame.getContentPane().add(thirdDateLabel);
-		
-		JLabel fourthDateLabel = new JLabel("June 26");
-		springLayout.putConstraint(SpringLayout.NORTH, fourthDateLabel, 35, SpringLayout.SOUTH, thirdDateLabel);
-		springLayout.putConstraint(SpringLayout.EAST, fourthDateLabel, -15, SpringLayout.WEST, fourthBandNameLabel);
-		frame.getContentPane().add(fourthDateLabel);
-		
+
 		
 		JLabel signInToBookAndPurchaseTicketsLabel = new JLabel("SIGN IN TO BOOK AND PURCHASE TICKETS");
-		springLayout.putConstraint(SpringLayout.NORTH, signInToBookAndPurchaseTicketsLabel, 66, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, signInToBookAndPurchaseTicketsLabel, 20, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, signInToBookAndPurchaseTicketsLabel, -15, SpringLayout.NORTH, upcomingEventsLabel);
-		springLayout.putConstraint(SpringLayout.EAST, signInToBookAndPurchaseTicketsLabel, 383, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, signInToBookAndPurchaseTicketsLabel, 60, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, signInToBookAndPurchaseTicketsLabel, 100, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, signInToBookAndPurchaseTicketsLabel, 0, SpringLayout.NORTH, upcomingEventsLabel);
 		signInToBookAndPurchaseTicketsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.getContentPane().add(signInToBookAndPurchaseTicketsLabel);
 		
@@ -154,6 +125,7 @@ public class MainUIFrame {
 		springLayout.putConstraint(SpringLayout.NORTH, comboBoxLabel, -166, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, comboBoxLabel, 76, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, comboBoxLabel, -150, SpringLayout.SOUTH, frame.getContentPane());
+
 		frame.getContentPane().add(comboBoxLabel);
 		comboBoxLabel.setVisible(false);
 		
@@ -171,8 +143,9 @@ public class MainUIFrame {
 		frame.getContentPane().add(viewAccountButton);
 		viewAccountButton.setVisible(false);
 		
-		String[] dropDownMenuItemsForDateAndBand = { "Date : Band", firstDateLabel.getText() + " : " + firstBandNameLabel.getText(), secondDateLabel.getText() + " : " + secondBandNameLabel.getText(), thirdDateLabel.getText() + " : " + thirdBandNameLabel.getText(), 
-				fourthDateLabel.getText() + " : " + fourthBandNameLabel.getText() };
+		String[] dropDownMenuItemsForDateAndBand = { "Date : Band", eventList.get(0).getEventDate() + " : " + eventList.get(0).getArtist(),
+				eventList.get(1).getEventDate() + " : " + eventList.get(1).getArtist(),
+				eventList.get(2).getEventDate() + " : " + eventList.get(2).getArtist()};
 		
 		DefaultComboBoxModel<String> comboModelForDateAndBandDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForDateAndBand);
 		
@@ -196,6 +169,8 @@ public class MainUIFrame {
 		springLayout.putConstraint(SpringLayout.EAST, seatingComboBox, -359, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(seatingComboBox);
 		seatingComboBox.setVisible(false);
+		
+		
 		
 		
 		dateAndBandComboBox.addActionListener(new ActionListener() {
@@ -247,10 +222,16 @@ public class MainUIFrame {
 						
 						if(confirmPurchaseResult == JOptionPane.YES_OPTION) {
 							
-							Ticket t = new Ticket();
+							Ticket t = new Ticket(selectedDateAndBandItem, selectedSeatItem);
 							t.setDateAndBand(selectedDateAndBandItem);
 							t.setSeat(selectedSeatItem);
-							ticketList.add(t);
+
+							try {
+								loggedInUser.addTicket(t);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							
 							
 							JOptionPane.getRootFrame().dispose();
@@ -316,7 +297,7 @@ public class MainUIFrame {
 						catch(IOException error){
 							error.printStackTrace();
 						}
-						
+						System.out.println("signed in");
 						JLabel signedInAsLabel = new JLabel("Signed in as: "+loggedInUser.getName());
 						springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
 						springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
@@ -433,6 +414,44 @@ public class MainUIFrame {
 			
 		});
 		
+		
+		// scroller
+		JPanel panelScroll = new JPanel();
+
+		
+		for (int i = 0; i < eventList.size(); i++) {
+			JLabel artistLabel = new JLabel(eventList.get(i).getArtist());
+			springLayout.putConstraint(SpringLayout.NORTH, artistLabel, 8, SpringLayout.SOUTH, upcomingEventsLabel);
+			springLayout.putConstraint(SpringLayout.WEST, artistLabel, 100 + 330*i, SpringLayout.WEST, frame.getContentPane());
+			artistLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			JLabel dateLabel = new JLabel("June "+ (5+7*i));
+			dateLabel.setVisible(false);
+
+			try {
+				File image = new File("images/"+ eventList.get(i).getArtist() +".jpg");
+				System.out.println("found image");
+				BufferedImage buffered_image = ImageIO.read(image);
+				ImageIcon icon = new ImageIcon(buffered_image);
+				artistLabel.setIcon(icon);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			panelScroll.add(artistLabel);
+			frame.getContentPane().add(dateLabel);
+		}
+		
+		// side scroller
+
+		JScrollPane scrollPane = new JScrollPane(panelScroll);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setBounds(100,100, 600,350);
+		
+		JPanel contentPane = new JPanel(null);
+		contentPane.setPreferredSize(new Dimension(1400,400));
+		contentPane.add(scrollPane);
+		frame.getContentPane().add(contentPane);
 		
 			
 	}
