@@ -33,9 +33,9 @@ public class Wallet{
 			String ptString = rs.nextLine();
 			this.rewardPoints = Integer.valueOf(ptString);
 			rs.close();
-			
-			//Card read in here I'll do that later
 		}
+			
+		//Card read in here I'll do that later
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
