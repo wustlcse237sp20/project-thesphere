@@ -9,7 +9,7 @@ public class Wallet{
 	private int cardSecurityCode;
 
 	public Wallet(){
-		//sql stuff here since no wallet info should be coming from db
+		
 	}
 
 	public void updateInfo(String newNum, String newName, String newExpDate, int newZip, int newSecCode){
