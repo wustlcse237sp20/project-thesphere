@@ -32,5 +32,8 @@ public class Event {
 	public String getIMGpath() {
 		return this.IMGpath;
 	}
-	
+
+	public void sellTicket(int row, int seat) {
+		sold[row][seat] = true;
+	}
 }
