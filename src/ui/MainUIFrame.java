@@ -36,7 +36,6 @@ public class MainUIFrame {
 	private String selectedDateAndBandItem;
 	private String selectedSeatItem;
 	private User loggedInUser;
-	private List<Ticket> ticketList = new ArrayList<Ticket>();
 	private List<Event> eventList = new ArrayList<Event>();
 
 	public JFrame getFrame() {
@@ -82,29 +81,12 @@ public class MainUIFrame {
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
 		
-		
-		
-		
-		// read through events.txt
-		// fill eventlist
-		try {
-			File f = new File("events.txt");
-			Scanner s = new Scanner(f);
-			while (s.hasNextLine()) {
-				
-				String date_and_event = s.nextLine();
-				String date = date_and_event.split(": ")[0];
-				String artist = date_and_event.split(": ")[1];
-				Event e = new Event(artist, date);
-				eventList.add(e);
-
-			}
-			s.close();
+		//Get events
+		File eventDir = new File("Events");
+		for (File e : eventDir.listFiles()) {
+			this.eventList.add(new Event(e.getName()));
 		}
-		catch (FileNotFoundException e) {
 
-			e.printStackTrace();
-		}
 		
 		// upcoming events label
 		JLabel upcomingEventsLabel = new JLabel("Upcoming Events");
@@ -227,7 +209,7 @@ public class MainUIFrame {
 							t.setSeat(selectedSeatItem);
 
 							try {
-								loggedInUser.addTicket(t);
+								loggedInUser.getWallet().addTicket(t);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -396,7 +378,7 @@ public class MainUIFrame {
 		viewAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(ticketList.isEmpty()) {
+				if(loggedInUser.getWallet().getTickets().isEmpty()) {
 					
 					UserAccountPage u = new UserAccountPage(loggedInUser.getName());
 					JFrame userAccountFrame = u.getUserAccountPageFrame();
@@ -404,7 +386,7 @@ public class MainUIFrame {
 					
 				}else {
 					
-					UserAccountPage u = new UserAccountPage(loggedInUser.getName(), ticketList);
+					UserAccountPage u = new UserAccountPage(loggedInUser.getName(), loggedInUser.getWallet().getTickets());
 					JFrame userAccountFrame = u.getUserAccountPageFrame();
 					userAccountFrame.setVisible(true);
 					
