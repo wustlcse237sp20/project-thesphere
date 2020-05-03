@@ -139,7 +139,7 @@ public class MainUIFrame {
 		frame.getContentPane().add(dateAndBandComboBox);
 		dateAndBandComboBox.setVisible(false);
 		
-		String[] dropDownMenuItemsForSeating = {"Row#,Seat#,Price", "Row1,Seat1,$20", "Row1,Seat2,$20", "Row1,Seat3,$20", "Row1,Seat,4,$20", "Row1,Seat5,$20", "Row1,Seat6,$20"};
+		String[] dropDownMenuItemsForSeating = {"Row#,Seat#,Price", "1 1", "1 2", "1 3", "1 4", "1 5", "1 6"};
 		
 		DefaultComboBoxModel<String> comboModelForSeatingDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForSeating);
 		
@@ -204,12 +204,11 @@ public class MainUIFrame {
 						
 						if(confirmPurchaseResult == JOptionPane.YES_OPTION) {
 							
-							Ticket t = new Ticket(selectedDateAndBandItem, selectedSeatItem);
-							t.setDateAndBand(selectedDateAndBandItem);
-							t.setSeat(selectedSeatItem);
+							//Ticket t = new Ticket(selectedDateAndBandItem + selectedSeatItem);
+							
 
 							try {
-								loggedInUser.getWallet().addTicket(t);
+								loggedInUser.getWallet().addTicket(selectedDateAndBandItem + selectedSeatItem);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();

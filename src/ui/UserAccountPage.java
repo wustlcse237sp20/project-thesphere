@@ -102,7 +102,7 @@ public class UserAccountPage {
 			
 		}else {
 			
-			firstPurchasedTicketLabel = new JLabel(purchasedTicketsList.get(0).getDateAndBand() + "; " + purchasedTicketsList.get(0).getSeat());
+			firstPurchasedTicketLabel = new JLabel(purchasedTicketsList.get(0).getEventID() + "; " + purchasedTicketsList.get(0).getRow() + "; " + purchasedTicketsList.get(0).getSeat());
 			
 		}
 		
@@ -124,10 +124,10 @@ public class UserAccountPage {
 			
 			for(int i = 0; i < purchasedTicketsList.size(); i++) {
 				// debugging
-				System.out.println(purchasedTicketsList.get(i).getDateAndBand());
+				System.out.println(purchasedTicketsList.get(i).getEventID());
 				
 				
-				JLabel label = new JLabel(purchasedTicketsList.get(i).getDateAndBand() + "; " + purchasedTicketsList.get(i).getSeat());
+				JLabel label = new JLabel(purchasedTicketsList.get(i).getEventID() + "; " + purchasedTicketsList.get(i).getSeat());
 				springLayout.putConstraint(SpringLayout.NORTH, label, (-387 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
 				springLayout.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, firstPurchasedTicketLabel);
 				springLayout.putConstraint(SpringLayout.SOUTH, label, (-371 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
