@@ -6,11 +6,11 @@ public class Ticket {
 	private int row;
 	private int seat;
 	
-	public Ticket(String ticketString) {
-		String[] ticketInfo = ticketString.split(" "); //event_id row seat
-		this.event = new Event(ticketInfo[0]);
-		this.row = Integer.valueOf(ticketInfo[1]);
-		this.seat = Integer.valueOf(ticketInfo[2]);
+	public Ticket(Event e, String ticketString) {
+		String[] ticketInfo = ticketString.split(" "); //row seat
+		this.event = e;
+		this.row = Integer.valueOf(ticketInfo[0]);
+		this.seat = Integer.valueOf(ticketInfo[1]);
 	}
 	
 	public Event getEvent() {
@@ -19,6 +19,10 @@ public class Ticket {
 	
 	public int getSeat() {
 		return seat;
+	}
+	
+	public int getRow() {
+		return this.row;
 	}
 	
 	public String toString() {
