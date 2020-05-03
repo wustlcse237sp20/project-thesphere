@@ -63,12 +63,28 @@ public class Event {
 		return this.eventDate;
 	}
 	
+	public int getRows() {
+		return this.rows;
+	}
+	
+	public int getSeatsPerRow() {
+		return this.seatsPerRow;
+	}
+	
 	public String getIMGpath() {
 		return this.IMGpath;
+	}
+	
+	public boolean[][] getTicketsSold(){
+		return this.sold;
 	}
 
 	public void sellTicket(int row, int seat) {
 		sold[row][seat] = true;
+	}
+	
+	public void refundTicket(int row, int seat) {
+		sold[row][seat] = false;
 	}
 	
 	public void saveSeatsSold() throws IOException {
