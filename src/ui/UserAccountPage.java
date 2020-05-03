@@ -7,11 +7,12 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import java.awt.Font;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
@@ -23,23 +24,27 @@ public class UserAccountPage {
 	private String signedInName;
 	private List<Ticket> purchasedTicketsList;
 	private int numberOfPurchasedTickets;
+	private User loggedInUser;
+
 
 	
 
 
-	public UserAccountPage(String signedInName, List<Ticket> purchasedTicketsList) {
+	public UserAccountPage(String signedInName, List<Ticket> purchasedTicketsList, User user) {
 		
 		super();
 		this.signedInName = signedInName;
 		this.purchasedTicketsList = purchasedTicketsList;
+		this.loggedInUser = user;
 		initialize();
 		
 	}
 	
-	public UserAccountPage(String signedInEmail) {
+	public UserAccountPage(String signedInEmail, User user) {
 		
 		super();
 		this.signedInName = signedInEmail;
+		this.loggedInUser = user;
 		initialize();
 		
 	}
@@ -56,6 +61,53 @@ public class UserAccountPage {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	
+	public void loadTickets(SpringLayout springLayout, JFrame frame) {
+		JLabel upcomingTicketsLabel = new JLabel("Your Upcoming Tickets: " + numberOfPurchasedTickets);
+		springLayout.putConstraint(SpringLayout.NORTH, upcomingTicketsLabel, -435, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, upcomingTicketsLabel, 75, SpringLayout.WEST, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, upcomingTicketsLabel, -419, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
+		upcomingTicketsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		userAccountPageFrame.getContentPane().add(upcomingTicketsLabel);
+		
+		// scroller
+		JPanel panelScroll = new JPanel();
+
+		
+		for (int i = 0; i < loggedInUser.getTickets().size(); i++) {
+			JLabel artistLabel = new JLabel(loggedInUser.getTickets().get(i).getDateAndBand());
+			springLayout.putConstraint(SpringLayout.NORTH, artistLabel, 8, SpringLayout.SOUTH, upcomingTicketsLabel);
+			springLayout.putConstraint(SpringLayout.WEST, artistLabel, 100 + 330*i, SpringLayout.WEST, frame.getContentPane());
+			artistLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			JLabel dateLabel = new JLabel("June "+ (5+7*i));
+			dateLabel.setVisible(false);
+
+			try {
+				File image = new File("images/"+ loggedInUser.getTickets().get(i).getIMGpath() +".jpg");
+				System.out.println("found image");
+				BufferedImage buffered_image = ImageIO.read(image);
+				ImageIcon icon = new ImageIcon(buffered_image);
+				artistLabel.setIcon(icon);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			panelScroll.add(artistLabel);
+			frame.getContentPane().add(dateLabel);
+		}
+		
+		// side scroller
+
+		JScrollPane scrollPane = new JScrollPane(panelScroll);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setBounds(100,100, 600,350);
+		
+		JPanel contentPane = new JPanel(null);
+		contentPane.setPreferredSize(new Dimension(1400,400));
+		contentPane.add(scrollPane);
+		frame.getContentPane().add(contentPane);
+	}
 	private void initialize() {
 		userAccountPageFrame = new JFrame();
 		userAccountPageFrame.setBounds(100, 100, 1100, 600);
@@ -73,6 +125,7 @@ public class UserAccountPage {
 		springLayout.putConstraint(SpringLayout.EAST, yourAccountPageLabel, 270, SpringLayout.WEST, userAccountPageFrame.getContentPane());
 		userAccountPageFrame.getContentPane().add(yourAccountPageLabel);
 		
+		loadTickets(springLayout, userAccountPageFrame);
 		
 		try {
 			
@@ -86,12 +139,6 @@ public class UserAccountPage {
 			
 		}
 		
-		JLabel upcomingTicketsLabel = new JLabel("Your Upcoming Tickets: " + numberOfPurchasedTickets);
-		springLayout.putConstraint(SpringLayout.NORTH, upcomingTicketsLabel, -435, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, upcomingTicketsLabel, 75, SpringLayout.WEST, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, upcomingTicketsLabel, -419, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-		upcomingTicketsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		userAccountPageFrame.getContentPane().add(upcomingTicketsLabel);
 		
 		JLabel firstPurchasedTicketLabel;
 		

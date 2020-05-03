@@ -105,22 +105,22 @@ public class User {
 		return false;
 	}
 
-	public void initializeTicketList(){
+	public void initializeTicketList() throws FileNotFoundException, IOException{
 		File f = new File("Users/"+email+"/tickets.txt");
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       // process the line.
+		    	String date_and_band = line.substring(0,line.indexOf("Row"));
+		    	String seat = line.substring(line.indexOf("Row"));
 
-// initialize tickets to contents of ticket.txt file
-// for each line in tickets.txt:
-// 		ticket.dateandband = texts until "Row"
-//		try {
-//			Scanner s = new Scanner(f);
-//			String pass = s.nextLine();
-//			s.close();
-//			return password.equals(pass);
-//		}
-//		catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//			return false;
-//		}
+		    	Ticket purchasedTicket = new Ticket(date_and_band,seat);
+		    	tickets.add(purchasedTicket);
+
+		    }
+		}
+
 	}
 
 
@@ -142,7 +142,6 @@ public class User {
 		infoWriter.write("First Name: "+first+System.lineSeparator()+"Last Name: "+last);
 		infoWriter.close();
 
-//		initializeTicketList();
 		
 		return new User(email);
 	}

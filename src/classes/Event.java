@@ -33,7 +33,7 @@ public class Event {
 		return this.IMGpath;
 	}
 
-	public void sellTicket(int row, int seat) {
-		sold[row][seat] = true;
-	}
+//	public void sellTicket(int row, int seat) {
+//		sold[row][seat] = true;
+//	}
 }

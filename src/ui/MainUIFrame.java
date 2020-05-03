@@ -81,6 +81,7 @@ public class MainUIFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
+
 		
 		
 		
@@ -332,6 +333,12 @@ public class MainUIFrame {
 
 				if(result == JOptionPane.OK_OPTION && User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
 					loggedInUser = new User(emailField.getText());
+					try {
+						loggedInUser.initializeTicketList();
+					} catch (Exception noTickets) {
+						// TODO Auto-generated catch block
+						noTickets.printStackTrace();
+					} 
 					JLabel signedInAsLabel = new JLabel("Signed in as: " + loggedInUser.getName());
 					
 					springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
@@ -398,13 +405,14 @@ public class MainUIFrame {
 				
 				if(ticketList.isEmpty()) {
 					
-					UserAccountPage u = new UserAccountPage(loggedInUser.getName());
+					UserAccountPage u = new UserAccountPage(loggedInUser.getName(),loggedInUser);
+					
 					JFrame userAccountFrame = u.getUserAccountPageFrame();
 					userAccountFrame.setVisible(true);
 					
 				}else {
 					
-					UserAccountPage u = new UserAccountPage(loggedInUser.getName(), ticketList);
+					UserAccountPage u = new UserAccountPage(loggedInUser.getName(), ticketList, loggedInUser);
 					JFrame userAccountFrame = u.getUserAccountPageFrame();
 					userAccountFrame.setVisible(true);
 					
