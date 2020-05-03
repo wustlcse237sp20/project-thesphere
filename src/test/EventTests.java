@@ -34,10 +34,10 @@ public class EventTests {
 	
 	@Test
 	public void getRowsAndSeats() {
-		assertEquals("10", testEvent1.getRows());
-		assertEquals("5", testEvent2.getRows());
-		assertEquals("10", testEvent1.getSeatsPerRow());
-		assertEquals("20", testEvent2.getSeatsPerRow());
+		assertEquals(10, testEvent1.getRows());
+		assertEquals(5, testEvent2.getRows());
+		assertEquals(10, testEvent1.getSeatsPerRow());
+		assertEquals(20, testEvent2.getSeatsPerRow());
 	}
 	
 	@Test
