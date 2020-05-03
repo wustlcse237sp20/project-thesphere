@@ -97,8 +97,8 @@ public class Event {
 				else {
 					fw.write("0 ");
 				}
-				fw.write(System.lineSeparator());
 			}
+			fw.write(System.lineSeparator());
 		}
 		fw.close();
 	}
