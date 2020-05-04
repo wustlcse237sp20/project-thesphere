@@ -19,7 +19,7 @@ public class TicketTests {
 
 	@Test
 	public void getEventID() {
-		assertEquals("1", testTicket.getEventID());
+		assertEquals("1", testTicket.getEvent().getEventID());
 	}
 	
 	@Test 

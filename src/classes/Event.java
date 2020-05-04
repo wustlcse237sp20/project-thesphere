@@ -55,7 +55,13 @@ public class Event {
 		}
 		
 	}
-	
+	public int getRows() {
+		return rows;
+	}
+	public int getSeatsPerRow() {
+		return seatsPerRow;
+	}
+
 	public String getEventID() {
 		return this.eventID;
 	}

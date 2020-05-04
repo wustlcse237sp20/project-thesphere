@@ -507,17 +507,11 @@ public class MainUIFrame {
 		
 		if (creditCardNumberField.length() != 16) {
 			creditCardValidated = false;
-		}
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid credit card number.", null, JOptionPane.ERROR_MESSAGE);
 
-		try {
-			Integer.parseInt(creditCardNumberField); 
-		} catch(NumberFormatException e) { 
-			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid credit card number.", null, JOptionPane.ERROR_MESSAGE);
-	        return false; 
-	    } catch(NullPointerException e) {
-			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid credit card number.", null, JOptionPane.ERROR_MESSAGE);
-	        return false;
-	    }
+			return false;
+
+		}
 
 		try {
 			String[] month_year = expiryMonthCreditCardField.split("/"); //event_id row seat
@@ -538,7 +532,7 @@ public class MainUIFrame {
 	        return false;
 	    }
 
-		
+
 		if (cvcCreditCardField.length() != 3) {
 			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid expiration date.", null, JOptionPane.ERROR_MESSAGE);
 			creditCardValidated = false;
@@ -553,6 +547,8 @@ public class MainUIFrame {
 			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid CVC.", null, JOptionPane.ERROR_MESSAGE);
 	        return false;
 	    }
+
+
 		return creditCardValidated;
 	}
 }

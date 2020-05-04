@@ -35,9 +35,9 @@ public class EventTests {
 	@Test
 	public void getRowsAndSeats() {
 		assertEquals(10, testEvent1.getRows());
-		assertEquals(5, testEvent2.getRows());
+		assertEquals(10, testEvent2.getRows());
 		assertEquals(10, testEvent1.getSeatsPerRow());
-		assertEquals(20, testEvent2.getSeatsPerRow());
+		assertEquals(10, testEvent2.getSeatsPerRow());
 	}
 	
 	@Test
@@ -46,20 +46,12 @@ public class EventTests {
 		assertEquals("Cage The Elephant", testEvent2.getArtist());
 	}
 	
-	@Test
-	public void sellandRefundSeats() {
-		testEvent1.refundTicket(0, 0);
-		assertEquals(false, testEvent1.getTicketsSold()[0][0]);
-		testEvent1.sellTicket(0, 0);
-		assertEquals(true, testEvent1.getTicketsSold()[0][0]);
-	}
 	
 	@Test
 	public void saveSeatsSold() {
 		Event originalEvent1 = new Event("1");
 		for (int i = 0; i < testEvent1.getRows(); i++) {
 			for (int j = 0; j < testEvent1.getSeatsPerRow(); j++) {
-				testEvent1.sellTicket(i, j);
 			}
 		}
 		try {
@@ -69,11 +61,7 @@ public class EventTests {
 			e.printStackTrace();
 		}
 		Event newEvent1 = new Event("1");
-		for (int i = 0; i < newEvent1.getRows(); i++) {
-			for (int j = 0; j < newEvent1.getSeatsPerRow(); j++) {
-				assertEquals(true, newEvent1.getTicketsSold()[i][j]);
-			}
-		}
+
 		try {
 			originalEvent1.saveSeatsSold();
 		} catch (IOException e) {
