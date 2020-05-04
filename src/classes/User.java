@@ -2,8 +2,6 @@ package classes;
 
 import java.io.*;
 
-import classes.Ticket;
-import java.util.*;
 
 
 import java.util.Scanner;
@@ -13,7 +11,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private List<Ticket> tickets = new ArrayList<>();
+	private Wallet wallet;
 	
 	//Eventually put a wallet object here and in constructor
 
@@ -36,8 +34,9 @@ public class User {
 				counter++;
 			}
 			s.close();
+			this.wallet = new Wallet(emailAddress);
 		}
-		catch (FileNotFoundException e) {
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -47,12 +46,11 @@ public class User {
 	}
 
 	public String getEmail() {
-		
 		return this.email;
-		
 	}
-	public List<Ticket> getTickets(){
-		return this.tickets;
+	
+	public Wallet getWallet() {
+		return this.wallet;
 	}
 
 	//All of these update functions can be made to return boolean (true=successful update)
@@ -78,52 +76,6 @@ public class User {
 	public void updatePassword(String newPass){
 		//sql update here
 	}
-
-	// Ticket Functionality
-
-	public boolean addTicket(Ticket ticketPurchased) throws IOException{
-		// add to List<Ticket> variable and update db
-		if(ticketPurchased != null){
-			tickets.add(ticketPurchased);
-			File tickets_file = new File("Users/" + email + "/tickets.txt");
-			try {
-				if (tickets_file.createNewFile()){
-					System.out.println("File is created!");
-				}
-				else {
-					System.out.println("File already exists.");
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			FileWriter ticketInfo = new FileWriter(tickets_file);
-			ticketInfo.write(ticketPurchased.getDateAndBand() + " " + ticketPurchased.getSeat());
-			ticketInfo.close();
-			return true;
-		}
-		return false;
-	}
-
-	public void initializeTicketList(){
-		File f = new File("Users/"+email+"/tickets.txt");
-
-// initialize tickets to contents of ticket.txt file
-// for each line in tickets.txt:
-// 		ticket.dateandband = texts until "Row"
-//		try {
-//			Scanner s = new Scanner(f);
-//			String pass = s.nextLine();
-//			s.close();
-//			return password.equals(pass);
-//		}
-//		catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//			return false;
-//		}
-	}
-
-
 	
 	public static User createNewUser(String first, String last, String email, String password) throws IOException {
 		File u = new File("Users");
@@ -132,6 +84,7 @@ public class User {
 		}
 		File f = new File("Users/"+email);
 		f.mkdir();
+
 				
 		
 		FileWriter passWriter = new FileWriter("./Users/"+email+"/password.txt");
@@ -141,8 +94,8 @@ public class User {
 		FileWriter infoWriter = new FileWriter("./Users/"+email+"/info.txt");
 		infoWriter.write("First Name: "+first+System.lineSeparator()+"Last Name: "+last);
 		infoWriter.close();
-
-//		initializeTicketList();
+		
+		Wallet.createWallet(email);
 		
 		return new User(email);
 	}

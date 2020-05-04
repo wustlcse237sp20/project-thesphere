@@ -2,51 +2,30 @@ package classes;
 
 public class Ticket {
 
-	private String dateAndBand;
-	private String seat;
-	private String IMGpath;
+	private Event event;
+	private int row;
+	private int seat;
 	
-	
-	public Ticket(String dateAndBand_, String seat_) {
-		this.dateAndBand = dateAndBand_;
-		this.seat = seat_;
-		int indexToStart = 0;
-		for (int i =0; i <dateAndBand_.length(); i++) {
-			if (dateAndBand_.charAt(i) == ':') {
-				indexToStart = i+2;
-				break;
-			}
-		}
-		this.IMGpath = dateAndBand_.substring(indexToStart);
-		
+	public Ticket(String ticketString) {
+		String[] ticketInfo = ticketString.split(" "); //event_id row seat
+		this.event = new Event(ticketInfo[0]);
+		this.row = Integer.valueOf(ticketInfo[1]);
+		this.seat = Integer.valueOf(ticketInfo[2]);
 	}
 	
-	public String getDateAndBand() {
-		
-		return dateAndBand; 
-		
+	public Event getEvent() {
+		return event; 
 	}
 	
-	public String getSeat() {
-		
+	public int getSeat() {
 		return seat;
-		
+	}
+	public int getRow() {
+		return row;
 	}
 	
-	public String getIMGpath() {
-		return IMGpath;
-	}
-	
-	public void setDateAndBand(String d) {
-		
-		this.dateAndBand = d;
-		
-	}
-	
-	public void setSeat(String s) {
-		
-		this.seat = s;
-		
+	public String toString() {
+		return this.event.getEventID()+" "+this.row+" "+this.seat;
 	}
 
 }

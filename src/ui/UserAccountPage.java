@@ -1,25 +1,28 @@
 package ui;
 import classes.*;
 import java.awt.*;
+
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import java.awt.Font;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+
+import java.awt.event.*;
 
 public class UserAccountPage {
 
 	private JFrame userAccountPageFrame;
-	private String purchasedTicket;
-	private String signedInEmail;
 	private String signedInName;
 	private List<Ticket> purchasedTicketsList;
 	private int numberOfPurchasedTickets;
@@ -74,6 +77,8 @@ public class UserAccountPage {
 		userAccountPageFrame.getContentPane().add(yourAccountPageLabel);
 		
 		
+		
+		
 		try {
 			
 			numberOfPurchasedTickets = purchasedTicketsList.size();
@@ -86,70 +91,80 @@ public class UserAccountPage {
 			
 		}
 		
-		JLabel upcomingTicketsLabel = new JLabel("Your Upcoming Tickets: " + numberOfPurchasedTickets);
+		JLabel upcomingTicketsLabel = new JLabel("Your Wallet has "+ numberOfPurchasedTickets + " tickets.");
 		springLayout.putConstraint(SpringLayout.NORTH, upcomingTicketsLabel, -435, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, upcomingTicketsLabel, 75, SpringLayout.WEST, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, upcomingTicketsLabel, 25, SpringLayout.WEST, userAccountPageFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, upcomingTicketsLabel, -419, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
 		upcomingTicketsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		userAccountPageFrame.getContentPane().add(upcomingTicketsLabel);
 		
-		JLabel firstPurchasedTicketLabel;
+		JLabel rowAndSeatLabel = new JLabel("Hover over your ticket to display row and seat #:");
+		springLayout.putConstraint(SpringLayout.NORTH, rowAndSeatLabel, 100, SpringLayout.NORTH, upcomingTicketsLabel);
+		springLayout.putConstraint(SpringLayout.WEST, rowAndSeatLabel, 25, SpringLayout.WEST, userAccountPageFrame.getContentPane());
+
+		rowAndSeatLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		userAccountPageFrame.getContentPane().add(rowAndSeatLabel);
 		
-		if(numberOfPurchasedTickets == 0) {
-			
-			firstPurchasedTicketLabel = new JLabel("No tickets purchased yet");
-			
-			
-		}else {
-			
-			firstPurchasedTicketLabel = new JLabel(purchasedTicketsList.get(0).getDateAndBand() + "; " + purchasedTicketsList.get(0).getSeat());
-			
-		}
 		
-		springLayout.putConstraint(SpringLayout.NORTH, firstPurchasedTicketLabel, -387, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, firstPurchasedTicketLabel, 87, SpringLayout.WEST, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, firstPurchasedTicketLabel, -371, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-		userAccountPageFrame.getContentPane().add(firstPurchasedTicketLabel);
+		JLabel rowAndSeatInfo = new JLabel();
+		springLayout.putConstraint(SpringLayout.NORTH, rowAndSeatInfo, 10, SpringLayout.SOUTH,rowAndSeatLabel);
+		springLayout.putConstraint(SpringLayout.WEST, rowAndSeatInfo, 50, SpringLayout.WEST, userAccountPageFrame.getContentPane());
+
+		userAccountPageFrame.getContentPane().add(rowAndSeatInfo);
+		rowAndSeatInfo.setVisible(false);
+
+		
 		
 		JLabel signedInAsLabel = new JLabel("Signed in as: " + signedInName);
 		signedInAsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 24, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, -789, SpringLayout.EAST, userAccountPageFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, signedInAsLabel, -547, SpringLayout.EAST, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 100, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, signedInAsLabel, -150, SpringLayout.EAST, userAccountPageFrame.getContentPane());
+		signedInAsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		userAccountPageFrame.getContentPane().add(signedInAsLabel);
 		
 		
-		// display tickets
-		if(numberOfPurchasedTickets > 1) {
-			
-			for(int i = 0; i < purchasedTicketsList.size(); i++) {
-				// debugging
-				System.out.println(purchasedTicketsList.get(i).getDateAndBand());
-				
-				
-				JLabel label = new JLabel(purchasedTicketsList.get(i).getDateAndBand() + "; " + purchasedTicketsList.get(i).getSeat());
-				springLayout.putConstraint(SpringLayout.NORTH, label, (-387 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
-				springLayout.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, firstPurchasedTicketLabel);
-				springLayout.putConstraint(SpringLayout.SOUTH, label, (-371 + i*60), SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
+		// scroller
+		JPanel panelScroll = new JPanel();
 
-				// display
-				try {
-					File image = new File("images/" + purchasedTicketsList.get(i).getIMGpath() +".jpg");
-					if (image.exists()){
-						System.out.println("exists");
-					}
-					BufferedImage travisScott = ImageIO.read(image);
-					ImageIcon icon = new ImageIcon(travisScott);
-					label.setIcon(icon);
-				} catch(Exception e) {
-					e.printStackTrace();
+		System.out.println(numberOfPurchasedTickets);
+		for (int i = 0; i < numberOfPurchasedTickets; i++) {
+
+			Ticket ticket = purchasedTicketsList.get(i);
+			JLabel artistLabel = new JLabel();
+			springLayout.putConstraint(SpringLayout.WEST, artistLabel, 100 + 330*i, SpringLayout.WEST, userAccountPageFrame.getContentPane());
+			artistLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			artistLabel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					rowAndSeatInfo.setText("Row # " + ticket.getRow() + " Seat # " + ticket.getSeat());
+					rowAndSeatInfo.setVisible(true);
 				}
-				userAccountPageFrame.getContentPane().add(label);
-				
-				
+			});
+			try {
+				System.out.println(purchasedTicketsList.get(i).getEvent().getArtist());
+				File image = new File("images/"+ purchasedTicketsList.get(i).getEvent().getArtist() +".jpg");
+				System.out.println("found image");
+				BufferedImage buffered_image = ImageIO.read(image);
+				ImageIcon icon = new ImageIcon(buffered_image);
+				artistLabel.setIcon(icon);
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
-			
+
+			panelScroll.add(artistLabel);
 		}
+		
+		// side scroller
+
+		JScrollPane scrollPane = new JScrollPane(panelScroll);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setBounds(450,80, 600,320);
+		
+		JPanel contentPane = new JPanel(null);
+		contentPane.setPreferredSize(new Dimension(1400,440));
+		contentPane.add(scrollPane);
+		userAccountPageFrame.getContentPane().add(contentPane);
 		
 		
 		
