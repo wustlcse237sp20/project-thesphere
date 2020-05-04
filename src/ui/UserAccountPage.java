@@ -117,7 +117,7 @@ public class UserAccountPage {
 		
 		JLabel signedInAsLabel = new JLabel("Signed in as: " + signedInName);
 		signedInAsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 100, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 10, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, signedInAsLabel, -150, SpringLayout.EAST, userAccountPageFrame.getContentPane());
 		signedInAsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		userAccountPageFrame.getContentPane().add(signedInAsLabel);

@@ -89,7 +89,7 @@ public class MainUIFrame {
 		// Set up labels:
 		JLabel welcomeLabel = new JLabel("The Sphere: Concert Venue");
 		welcomeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 32));
-		springLayout.putConstraint(SpringLayout.NORTH, welcomeLabel, 10, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, welcomeLabel, 30, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, welcomeLabel, -350, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(welcomeLabel);
 		
