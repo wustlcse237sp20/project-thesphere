@@ -19,6 +19,21 @@ Iteration 2:
 - Is there anything that you implemented but doesn't currently work?
 	
 	The front-end code for purchasing tickets is in place but there is no back-end code to provide any functionality behind that.
+	
+	
+Iteration 3:
+
+- What user stories were completed this iteration?
+	
+	Ticket and wallet functionality was added with the user class. Integrated input/output system with the event and wallet classes to update "database" between app sessions. Added more events to our upcoming events. Include ticket information display on profile page. Cleaned up the presentation of the site a little by adding and removing JLabels as needed. Improved credit card verification by verifying the following:
+	1) Credit card is composed of 16 digits.
+	2) The expiration date is valid (months between 0 and 12 and years between 0 and 99).
+	3) The CVC is a 3 digit number.
+Added default text to sign in, create account, and payment forms to help user know what information to put down in each field. 
+
+- Is there anything that you implemented but doesn't currently work?
+	
+	Not as far as we know from our tests and our experience with the app. 
 
 # Project Description
 The Sphere is a concert venue; customers can go to our venue's website to view upcoming events and purchase tickets. Users can make an account and see all of their purchased tickets on the account page. The site also includes a points-based reward system: for each ticket purchase, users earn an amount of points that can go towards a discount on following ticket purchases
