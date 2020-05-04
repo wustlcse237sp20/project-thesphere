@@ -68,7 +68,7 @@ public class Event {
 	}
 
 	public void sellTicket(int row, int seat) {
-		sold[row][seat] = true;
+		sold[row-1][seat-1] = true;
 	}
 	
 	public void saveSeatsSold() throws IOException {
@@ -81,8 +81,8 @@ public class Event {
 				else {
 					fw.write("0 ");
 				}
-				fw.write(System.lineSeparator());
 			}
+			fw.write(System.lineSeparator());
 		}
 		fw.close();
 	}

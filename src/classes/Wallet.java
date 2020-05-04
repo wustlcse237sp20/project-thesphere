@@ -81,6 +81,8 @@ public class Wallet{
 		this.tickets.add(new Ticket(ticketString));
 	}
 	
+	
+	
 	public void saveTickets() throws IOException {
 		FileWriter ticketWriter = new FileWriter("./Users/"+this.ownerEmail+"/Wallet/tickets.txt", false);
 		for (Ticket ticket : this.tickets) {

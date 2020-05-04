@@ -2,8 +2,6 @@ package classes;
 
 import java.io.*;
 
-import classes.Ticket;
-import java.util.*;
 
 
 import java.util.Scanner;
@@ -86,6 +84,7 @@ public class User {
 		}
 		File f = new File("Users/"+email);
 		f.mkdir();
+
 				
 		
 		FileWriter passWriter = new FileWriter("./Users/"+email+"/password.txt");

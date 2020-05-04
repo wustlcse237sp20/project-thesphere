@@ -26,7 +26,6 @@ import classes.Event;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class MainUIFrame {
@@ -111,6 +110,13 @@ public class MainUIFrame {
 		frame.getContentPane().add(comboBoxLabel);
 		comboBoxLabel.setVisible(false);
 		
+		final JLabel signedInAsLabel = new JLabel();
+		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 10, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, signedInAsLabel, -150, SpringLayout.EAST, frame.getContentPane());
+		signedInAsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		frame.getContentPane().add(signedInAsLabel);
+		signedInAsLabel.setVisible(false);
+		
 		JButton proceedToCheckoutButton = new JButton("Click here when ready to checkout");
 		springLayout.putConstraint(SpringLayout.NORTH, proceedToCheckoutButton, -65, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, proceedToCheckoutButton, 353, SpringLayout.WEST, frame.getContentPane());
@@ -124,10 +130,15 @@ public class MainUIFrame {
 		springLayout.putConstraint(SpringLayout.EAST, viewAccountButton, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(viewAccountButton);
 		viewAccountButton.setVisible(false);
+
 		
-		String[] dropDownMenuItemsForDateAndBand = { "Date : Band", eventList.get(0).getEventDate() + " : " + eventList.get(0).getArtist(),
+
+		
+		String[] dropDownMenuItemsForDateAndBand = { "Band : Date", eventList.get(0).getEventDate() + " : " + eventList.get(0).getArtist(),
 				eventList.get(1).getEventDate() + " : " + eventList.get(1).getArtist(),
-				eventList.get(2).getEventDate() + " : " + eventList.get(2).getArtist()};
+				eventList.get(2).getEventDate() + " : " + eventList.get(2).getArtist(),
+				eventList.get(3).getEventDate() + " : " + eventList.get(3).getArtist(),
+				eventList.get(4).getEventDate() + " : " + eventList.get(4).getArtist()};
 		
 		DefaultComboBoxModel<String> comboModelForDateAndBandDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForDateAndBand);
 		
@@ -139,7 +150,9 @@ public class MainUIFrame {
 		frame.getContentPane().add(dateAndBandComboBox);
 		dateAndBandComboBox.setVisible(false);
 		
-		String[] dropDownMenuItemsForSeating = {"Row#,Seat#,Price", "Row1,Seat1,$20", "Row1,Seat2,$20", "Row1,Seat3,$20", "Row1,Seat,4,$20", "Row1,Seat5,$20", "Row1,Seat6,$20"};
+
+		
+		String[] dropDownMenuItemsForSeating = {"Row#,Seat#,Price", "Row1,Seat1,$20", "Row1,Seat2,$20", "Row1,Seat3,$20", "Row1,Seat4,$20", "Row1,Seat5,$20", "Row1,Seat6,$20"};
 		
 		DefaultComboBoxModel<String> comboModelForSeatingDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForSeating);
 		
@@ -181,7 +194,7 @@ public class MainUIFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if((selectedDateAndBandItem == "Date : Band") || (selectedSeatItem == "Row#,Seat#,Price")) {
+				if((selectedDateAndBandItem == "Band : Date") || (selectedSeatItem == "Row#,Seat#,Price")) {
 					
 					JOptionPane.showMessageDialog(frame, "Error! Please choose a valid Date/Band and Seat.", null, JOptionPane.ERROR_MESSAGE);
 					
@@ -204,12 +217,31 @@ public class MainUIFrame {
 						
 						if(confirmPurchaseResult == JOptionPane.YES_OPTION) {
 							
-							Ticket t = new Ticket(selectedDateAndBandItem, selectedSeatItem);
-							t.setDateAndBand(selectedDateAndBandItem);
-							t.setSeat(selectedSeatItem);
 
+							String[] selected_string = selectedDateAndBandItem.split(": "); //event_id row seat
+							String selected_artist = selected_string[1];
+							String[] selected_string2 = selectedSeatItem.split(","); //event_id row seat
+							String[] selected_string2_row = selected_string2[0].split("Row"); //event_id row seat
+							String[] selected_string2_seat = selected_string2[1].split("Seat"); //event_id row seat
+							int row = Integer.parseInt(selected_string2_row[1]);
+							int seat = Integer.parseInt(selected_string2_seat[1]);
+							
+							Event selectedEvent = null;
 							try {
-								loggedInUser.getWallet().addTicket(t);
+								for (int i = 0; i < eventList.size(); i ++){
+									if(eventList.get(i).getArtist().contentEquals(selected_artist)) {
+										selectedEvent= eventList.get(i);
+									}
+								}
+								// update wallet with ticket
+								loggedInUser.getWallet().addTicket(selectedEvent.getEventID() + " " +row + " " +seat);
+								
+								// save user's wallet info in db
+								loggedInUser.getWallet().saveTickets();
+								
+								// update event's seating info in db 
+								selectedEvent.sellTicket(row, seat);
+								selectedEvent.saveSeatsSold();
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -279,16 +311,14 @@ public class MainUIFrame {
 						catch(IOException error){
 							error.printStackTrace();
 						}
-						System.out.println("signed in");
-						JLabel signedInAsLabel = new JLabel("Signed in as: "+loggedInUser.getName());
-						springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
-						springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
-						frame.getContentPane().add(signedInAsLabel);
+						signedInAsLabel.setText("Signed in as: "+ loggedInUser.getName());
+						signedInAsLabel.setVisible(true);
 						
 						comboBoxLabel.setVisible(true);
 						dateAndBandComboBox.setVisible(true);
 						signInToBookAndPurchaseTicketsLabel.setVisible(false);
 						viewAccountButton.setVisible(true);
+						createAccountButton.setVisible(false);
 						}
 					
 				}else if(createAccountResult == JOptionPane.CANCEL_OPTION) {
@@ -314,16 +344,14 @@ public class MainUIFrame {
 
 				if(result == JOptionPane.OK_OPTION && User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
 					loggedInUser = new User(emailField.getText());
-					JLabel signedInAsLabel = new JLabel("Signed in as: " + loggedInUser.getName());
-					
-					springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 20, SpringLayout.NORTH, frame.getContentPane());
-					springLayout.putConstraint(SpringLayout.WEST, signedInAsLabel, 55, SpringLayout.EAST, createAccountButton);
-					frame.getContentPane().add(signedInAsLabel);
+					signedInAsLabel.setText("Signed in as: "+ loggedInUser.getName());
+					signedInAsLabel.setVisible(true);
 					
 					comboBoxLabel.setVisible(true);
 					dateAndBandComboBox.setVisible(true);
 					signInToBookAndPurchaseTicketsLabel.setVisible(false);
 					viewAccountButton.setVisible(true);
+					signInButton.setVisible(false);
 					
 					
 				}else if(result == JOptionPane.OK_OPTION && !User.checkEmailAndPassword(emailField.getText(), String.valueOf(passwordField.getPassword()))) {
@@ -345,6 +373,8 @@ public class MainUIFrame {
 	
 		
 		//Sign out button and action listener; always visible on main frame
+		
+		
 		JButton signOutButton = new JButton("Sign out");
 		springLayout.putConstraint(SpringLayout.NORTH, signOutButton, -568, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, signOutButton, -539, SpringLayout.SOUTH, frame.getContentPane());
@@ -375,6 +405,7 @@ public class MainUIFrame {
 		frame.getContentPane().add(signOutButton);
 		
 		
+		
 		viewAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -402,7 +433,8 @@ public class MainUIFrame {
 
 		
 		for (int i = 0; i < eventList.size(); i++) {
-			JLabel artistLabel = new JLabel(eventList.get(i).getArtist());
+			
+			JLabel artistLabel = new JLabel();
 			springLayout.putConstraint(SpringLayout.NORTH, artistLabel, 8, SpringLayout.SOUTH, upcomingEventsLabel);
 			springLayout.putConstraint(SpringLayout.WEST, artistLabel, 100 + 330*i, SpringLayout.WEST, frame.getContentPane());
 			artistLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -411,7 +443,6 @@ public class MainUIFrame {
 
 			try {
 				File image = new File("images/"+ eventList.get(i).getArtist() +".jpg");
-				System.out.println("found image");
 				BufferedImage buffered_image = ImageIO.read(image);
 				ImageIcon icon = new ImageIcon(buffered_image);
 				artistLabel.setIcon(icon);
@@ -447,6 +478,5 @@ public class MainUIFrame {
 		creditCardValidated = true;
 		
 		return creditCardValidated;
-		
 	}
 }

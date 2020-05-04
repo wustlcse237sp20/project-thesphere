@@ -20,6 +20,9 @@ public class Ticket {
 	public int getSeat() {
 		return seat;
 	}
+	public int getRow() {
+		return row;
+	}
 	
 	public String toString() {
 		return this.event.getEventID()+" "+this.row+" "+this.seat;
