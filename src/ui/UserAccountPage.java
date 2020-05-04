@@ -91,14 +91,14 @@ public class UserAccountPage {
 			
 		}
 		
-		JLabel upcomingTicketsLabel = new JLabel("Your Upcoming Tickets: " + numberOfPurchasedTickets);
+		JLabel upcomingTicketsLabel = new JLabel("Your Wallet has "+ numberOfPurchasedTickets + " tickets.");
 		springLayout.putConstraint(SpringLayout.NORTH, upcomingTicketsLabel, -435, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, upcomingTicketsLabel, 25, SpringLayout.WEST, userAccountPageFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, upcomingTicketsLabel, -419, SpringLayout.SOUTH, userAccountPageFrame.getContentPane());
 		upcomingTicketsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		userAccountPageFrame.getContentPane().add(upcomingTicketsLabel);
 		
-		JLabel rowAndSeatLabel = new JLabel("Click on your ticket to display row and seat number:");
+		JLabel rowAndSeatLabel = new JLabel("Hover over your ticket to display row and seat #:");
 		springLayout.putConstraint(SpringLayout.NORTH, rowAndSeatLabel, 100, SpringLayout.NORTH, upcomingTicketsLabel);
 		springLayout.putConstraint(SpringLayout.WEST, rowAndSeatLabel, 25, SpringLayout.WEST, userAccountPageFrame.getContentPane());
 
@@ -117,7 +117,7 @@ public class UserAccountPage {
 		
 		JLabel signedInAsLabel = new JLabel("Signed in as: " + signedInName);
 		signedInAsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 10, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, signedInAsLabel, 100, SpringLayout.NORTH, userAccountPageFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, signedInAsLabel, -150, SpringLayout.EAST, userAccountPageFrame.getContentPane());
 		signedInAsLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		userAccountPageFrame.getContentPane().add(signedInAsLabel);
@@ -135,7 +135,7 @@ public class UserAccountPage {
 			artistLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			artistLabel.addMouseListener(new MouseAdapter() {
 				@Override
-				public void mouseClicked(MouseEvent e) {
+				public void mouseEntered(MouseEvent e) {
 					rowAndSeatInfo.setText("Row # " + ticket.getRow() + " Seat # " + ticket.getSeat());
 					rowAndSeatInfo.setVisible(true);
 				}

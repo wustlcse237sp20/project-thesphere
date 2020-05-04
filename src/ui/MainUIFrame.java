@@ -85,15 +85,19 @@ public class MainUIFrame {
 		for (File e : eventDir.listFiles()) {
 			this.eventList.add(new Event(e.getName()));
 		}
-
+		
+		// Set up labels:
+		JLabel welcomeLabel = new JLabel("The Sphere: Concert Venue");
+		welcomeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 32));
+		springLayout.putConstraint(SpringLayout.NORTH, welcomeLabel, 10, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, welcomeLabel, -350, SpringLayout.EAST, frame.getContentPane());
+		frame.getContentPane().add(welcomeLabel);
 		
 		// upcoming events label
 		JLabel upcomingEventsLabel = new JLabel("Upcoming Events");
 		springLayout.putConstraint(SpringLayout.NORTH, upcomingEventsLabel, 80, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, upcomingEventsLabel, 100, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().add(upcomingEventsLabel);
-		
-
 		
 		JLabel signInToBookAndPurchaseTicketsLabel = new JLabel("SIGN IN TO BOOK AND PURCHASE TICKETS");
 		springLayout.putConstraint(SpringLayout.NORTH, signInToBookAndPurchaseTicketsLabel, 60, SpringLayout.NORTH, frame.getContentPane());
@@ -132,16 +136,13 @@ public class MainUIFrame {
 		viewAccountButton.setVisible(false);
 
 		
-
-		
-		String[] dropDownMenuItemsForDateAndBand = { "Band : Date", eventList.get(0).getEventDate() + " : " + eventList.get(0).getArtist(),
-				eventList.get(1).getEventDate() + " : " + eventList.get(1).getArtist(),
+		String[] dropDownMenuItemsForDateAndBand = { "Band : Date", eventList.get(1).getEventDate() + " : " + eventList.get(1).getArtist(),
 				eventList.get(2).getEventDate() + " : " + eventList.get(2).getArtist(),
 				eventList.get(3).getEventDate() + " : " + eventList.get(3).getArtist(),
-				eventList.get(4).getEventDate() + " : " + eventList.get(4).getArtist()};
+				eventList.get(4).getEventDate() + " : " + eventList.get(4).getArtist(),
+				eventList.get(5).getEventDate() + " : " + eventList.get(5).getArtist()};
 		
 		DefaultComboBoxModel<String> comboModelForDateAndBandDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForDateAndBand);
-		
 		
 		JComboBox dateAndBandComboBox = new JComboBox(comboModelForDateAndBandDropDownMenu);
 		springLayout.putConstraint(SpringLayout.NORTH, dateAndBandComboBox, 6, SpringLayout.SOUTH, comboBoxLabel);
@@ -150,9 +151,19 @@ public class MainUIFrame {
 		frame.getContentPane().add(dateAndBandComboBox);
 		dateAndBandComboBox.setVisible(false);
 		
+		for (int i = 1; i <=10;i++) {
+			
+		}
+		String[] dropDownMenuItemsForSeating = new String[101];
+		dropDownMenuItemsForSeating[0] = "Row#,Seat#,Price";
+		int index = 1;
+		for (int i = 1; i <=10;i++) {
+			for (int j = 1; j <=10;j++) {
 
-		
-		String[] dropDownMenuItemsForSeating = {"Row#,Seat#,Price", "Row1,Seat1,$20", "Row1,Seat2,$20", "Row1,Seat3,$20", "Row1,Seat4,$20", "Row1,Seat5,$20", "Row1,Seat6,$20"};
+				dropDownMenuItemsForSeating[index] = "Row"+i+",Seat"+j+",$"+100/i;
+				index++;
+			}
+		}
 		
 		DefaultComboBoxModel<String> comboModelForSeatingDropDownMenu = new DefaultComboBoxModel<String>(dropDownMenuItemsForSeating);
 		
@@ -205,10 +216,16 @@ public class MainUIFrame {
 					JTextField lastNameCreditCardField = new JTextField();
 					JTextField expiryMonthCreditCardField = new JTextField();
 					JTextField cvcCreditCardField = new JTextField();
+					creditCardNumberField.setText("0000000000000000");
+					firstNameCreditCardField.setText("First Name");
+					lastNameCreditCardField.setText("Last Name");
+					expiryMonthCreditCardField.setText("Expiration Date (MM/YY)");
+					cvcCreditCardField.setText("CVC");
+					
 					String paymentDialogMessage = "Please enter your card number, first name, last name, expiry month, and CVC";
 					int creditCardResult = JOptionPane.showOptionDialog(frame, new Object[] {paymentDialogMessage, creditCardNumberField, firstNameCreditCardField, lastNameCreditCardField, expiryMonthCreditCardField, cvcCreditCardField}, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, paymentDialogMessage);   
 					
-					if((creditCardResult == JOptionPane.OK_OPTION) && (cardInfoValidated())) {
+					if((creditCardResult == JOptionPane.OK_OPTION) && (cardInfoValidated(creditCardNumberField.getText(), expiryMonthCreditCardField.getText(), cvcCreditCardField.getText()))) {
 				
 						
 						String confirmPurchaseMessage = "Confirm Purchase of: '" + selectedDateAndBandItem + "', seat number: '" + selectedSeatItem + "' ?";
@@ -216,7 +233,8 @@ public class MainUIFrame {
 						int confirmPurchaseResult = JOptionPane.showConfirmDialog(frame, new Object[] {confirmPurchaseMessage}, null, JOptionPane.YES_NO_OPTION);
 						
 						if(confirmPurchaseResult == JOptionPane.YES_OPTION) {
-							
+
+
 
 							String[] selected_string = selectedDateAndBandItem.split(": "); //event_id row seat
 							String selected_artist = selected_string[1];
@@ -226,9 +244,10 @@ public class MainUIFrame {
 							int row = Integer.parseInt(selected_string2_row[1]);
 							int seat = Integer.parseInt(selected_string2_seat[1]);
 							
+
 							Event selectedEvent = null;
 							try {
-								for (int i = 0; i < eventList.size(); i ++){
+								for (int i = 1; i < eventList.size(); i ++){
 									if(eventList.get(i).getArtist().contentEquals(selected_artist)) {
 										selectedEvent= eventList.get(i);
 									}
@@ -270,7 +289,8 @@ public class MainUIFrame {
 						
 						JOptionPane.getRootFrame().dispose();
 						
-					}	
+					}
+
 				}	
 			}
 			
@@ -289,6 +309,12 @@ public class MainUIFrame {
 				JTextField emailFieldCA = new JTextField();
 				JPasswordField passwordFieldCA = new JPasswordField();
 				JPasswordField retypePasswordFieldCA = new JPasswordField();
+				firstNameFieldCA.setText("First Name");
+				lastNameFieldCA.setText("Last Name");
+				emailFieldCA.setText("Email Address");
+				passwordFieldCA.setText("Password");
+				retypePasswordFieldCA.setText("Retype Password");
+
 				
 				String createAccountMessage = "Please enter your first name, last name, email, password, and retyped password";
 				
@@ -339,6 +365,10 @@ public class MainUIFrame {
 						
 				JTextField emailField = new JTextField();
 				JPasswordField passwordField = new JPasswordField();
+				
+				emailField.setText("Email");
+				passwordField.setText("Password");
+				
 				String signInMessage = "Please enter your email and password.";
 				int result = JOptionPane.showOptionDialog(frame, new Object[] {signInMessage,  emailField,  passwordField}, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, signInMessage);
 
@@ -431,9 +461,8 @@ public class MainUIFrame {
 		// scroller
 		JPanel panelScroll = new JPanel();
 
-		
-		for (int i = 0; i < eventList.size(); i++) {
-			
+		for (int i = 1; i < eventList.size(); i++) {
+
 			JLabel artistLabel = new JLabel();
 			springLayout.putConstraint(SpringLayout.NORTH, artistLabel, 8, SpringLayout.SOUTH, upcomingEventsLabel);
 			springLayout.putConstraint(SpringLayout.WEST, artistLabel, 100 + 330*i, SpringLayout.WEST, frame.getContentPane());
@@ -473,10 +502,57 @@ public class MainUIFrame {
 	 * Check that the card info input by the user is valid (correct digits in the card/CVC code is 3 characters
 	 * @return Boolean for whether or not the account is validated successfully
 	 */
-	public boolean cardInfoValidated() {
-		
+	public boolean cardInfoValidated(String creditCardNumberField, String expiryMonthCreditCardField,String cvcCreditCardField) {
 		creditCardValidated = true;
 		
+		if (creditCardNumberField.length() != 16) {
+			creditCardValidated = false;
+		}
+
+		try {
+			Integer.parseInt(creditCardNumberField); 
+		} catch(NumberFormatException e) { 
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid credit card number.", null, JOptionPane.ERROR_MESSAGE);
+	        return false; 
+	    } catch(NullPointerException e) {
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid credit card number.", null, JOptionPane.ERROR_MESSAGE);
+	        return false;
+	    }
+
+		try {
+			String[] month_year = expiryMonthCreditCardField.split("/"); //event_id row seat
+			int month = Integer.parseInt(month_year[0]);
+			int year = Integer.parseInt(month_year[1]);
+			if (month >= 0 && month <=12 && year <= 99 && year >=0) {
+
+			}
+			else {
+				JOptionPane.showMessageDialog(frame, "Error! Please enter a expiration date.", null, JOptionPane.ERROR_MESSAGE);
+				creditCardValidated = false;
+			}
+		} catch(NumberFormatException e) { 
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid expiration date.", null, JOptionPane.ERROR_MESSAGE);
+	        return false; 
+	    } catch(NullPointerException e) {
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid expiration date.", null, JOptionPane.ERROR_MESSAGE);
+	        return false;
+	    }
+
+		
+		if (cvcCreditCardField.length() != 3) {
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid expiration date.", null, JOptionPane.ERROR_MESSAGE);
+			creditCardValidated = false;
+		}
+
+		try {
+			Integer.parseInt(cvcCreditCardField); 
+		} catch(NumberFormatException e) { 
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid CVC.", null, JOptionPane.ERROR_MESSAGE);
+	        return false;
+	    } catch(NullPointerException e) {
+			JOptionPane.showMessageDialog(frame, "Error! Please enter a valid CVC.", null, JOptionPane.ERROR_MESSAGE);
+	        return false;
+	    }
 		return creditCardValidated;
 	}
 }

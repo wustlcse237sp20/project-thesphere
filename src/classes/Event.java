@@ -16,37 +16,42 @@ public class Event {
 	
 	
 	public Event(String event_id) {
-		try {
-			this.eventID = event_id;
-			File f = new File("Events/"+event_id+"/info.txt");
-			Scanner fs = new Scanner(f);
-			
-			String eventInfo = fs.nextLine();
-			String[] eventInfoArray = eventInfo.split(", ");
-			
-			this.artist = eventInfoArray[0];
-			this.eventDate = eventInfoArray[1];
-			this.price = Integer.valueOf(eventInfoArray[2]);
-			this.rows = Integer.valueOf(eventInfoArray[3]);
-			this.seatsPerRow = Integer.valueOf(eventInfoArray[4]);
-			this.sold = new boolean[rows][seatsPerRow];
-			
-			fs.close();
-			
-			File t = new File("Events/"+event_id+"/seats.txt");
-			Scanner ts = new Scanner(t);
-			for (int i = 0; i < rows; i++) {
-				String seatString = ts.nextLine();
-				for (int j = 0; j < seatsPerRow; j++) {
-					if (seatString.split(" ")[j].equals("1")) {
-						sold[i][j] = true;
+		if (event_id == null) {
+			System.out.println("here");
+		}
+		if (!event_id.contentEquals(".DS_Store")) {
+			try {
+				this.eventID = event_id;
+				File f = new File("Events/"+event_id+"/info.txt");
+				Scanner fs = new Scanner(f);
+				
+				String eventInfo = fs.nextLine();
+				String[] eventInfoArray = eventInfo.split(", ");
+				
+				this.artist = eventInfoArray[0];
+				this.eventDate = eventInfoArray[1];
+				this.price = Integer.valueOf(eventInfoArray[2]);
+				this.rows = Integer.valueOf(eventInfoArray[3]);
+				this.seatsPerRow = Integer.valueOf(eventInfoArray[4]);
+				this.sold = new boolean[rows][seatsPerRow];
+				
+				fs.close();
+				
+				File t = new File("Events/"+event_id+"/seats.txt");
+				Scanner ts = new Scanner(t);
+				for (int i = 0; i < rows; i++) {
+					String seatString = ts.nextLine();
+					for (int j = 0; j < seatsPerRow; j++) {
+						if (seatString.split(" ")[j].equals("1")) {
+							sold[i][j] = true;
+						}
 					}
 				}
+				ts.close();
 			}
-			ts.close();
-		}
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
