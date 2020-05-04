@@ -4,7 +4,7 @@ To Run Program:
 
 - Eclipse: Open the entire repo folder in Eclipse and run the file "MainUIFrame.java". 
 
-- Terminal: "cd" to the directory that the repo is cloned to, cd into the "src" directory, compile MainUIFrame with `javac MainUIFrame.java` and run `java MainUIFrame`.
+- Terminal: "cd" to the directory that the repo is cloned to, cd into the head directory (wheree the file 'theSphere.jar' is located), and run 'java -jar theSphere.jar'.
 
 Iteration 2:
 
